@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     private float timeRate = .2f;//time to convert in minutes
 
     public Text title;
+
     void Start()
     {
         if (Game.Level == 0){
@@ -160,5 +161,5 @@ public class GameController : MonoBehaviour
                 villageController.UseMedicine();
             }
         }
-    }
+    }    
 }   

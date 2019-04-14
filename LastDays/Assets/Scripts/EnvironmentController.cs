@@ -37,6 +37,8 @@ public class EnvironmentController : MonoBehaviour
     private bool generated = false;
 
     // Start is called before the first frame update
+
+    public SoundManager gameSound;
     void Start()
     {
         table.Add("0_0", true);
@@ -106,6 +108,7 @@ public class EnvironmentController : MonoBehaviour
             {
                 GameObject e1 = Instantiate(enemy01Prefab, CalculateItemPosition(), Quaternion.identity);
                 e1.GetComponent<EnemyController>().ChangeSide();
+                e1.GetComponent<EnemyController>().gameSound = gameSound;
                 if (Mathf.FloorToInt(e1.transform.position.x + e1.transform.position.y + e1.transform.position.z)%2 == 0) {
                     e1.GetComponent<EnemyController>().player = Player;
                 }
@@ -115,6 +118,7 @@ public class EnvironmentController : MonoBehaviour
             {
                 GameObject e2 = Instantiate(enemy02Prefab, CalculateItemPosition(), Quaternion.identity);
                 e2.GetComponent<EnemyController>().player = Player;
+                e2.GetComponent<EnemyController>().gameSound = gameSound;
                 if (Mathf.FloorToInt(e2.transform.position.x + e2.transform.position.y + e2.transform.position.z)%2 == 0) {
                     e2.GetComponent<EnemyController>().ChangeSide();
                 }
@@ -135,12 +139,19 @@ public class EnvironmentController : MonoBehaviour
     Hashtable table = new Hashtable();
     private Vector3 CalculateItemPosition(int recursive = 0) {
         Vector3Int v3 =  GenerateValue();
-        if ((tileMapWalkable.HasTile(v3) && !tileMapBlock.HasTile(v3) && !tileMapExit.HasTile(v3)) || recursive > 10) {
+        if (isNotNextToThePlayer(Vector2.zero, new Vector2(v3.x, v3.y)) &&
+            ((tileMapWalkable.HasTile(v3) && !tileMapBlock.HasTile(v3) && !tileMapExit.HasTile(v3)) || recursive > 10)) {
             return new Vector3(v3.x + 0.5f, v3.y + 0.5f, v3.z - 0.5f);
         } else {
             return CalculateItemPosition(recursive++);    
         }
     }
+
+    private bool isNotNextToThePlayer(Vector2 playerPosition, Vector2 newPosition) {
+        return ((newPosition.x > playerPosition.x + 1) || (newPosition.x < playerPosition.x - 1)) &&
+        ((newPosition.y > playerPosition.y + 1) || (newPosition.y < playerPosition.y - 1));
+    }
+
     private Vector3Int CalculateExitPosition(int recursive = 0) {
         Vector3Int v3 =  GenerateValue();
         if ((tileMapWalkable.HasTile(v3) && !tileMapBlock.HasTile(v3) && !tileMapExit.HasTile(v3)) || recursive > 10) {

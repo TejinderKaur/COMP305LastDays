@@ -51,6 +51,12 @@ public class MainMenuController : MonoBehaviour
         SceneManager.LoadScene("MainScreen");
     }
 
+    public void ControlsScene()
+    {
+        Game.Level = 1;
+        SceneManager.LoadScene("ControlScreen");
+    }
+
     // What happens when I click the quit button?
     public void QuitGame()
     {

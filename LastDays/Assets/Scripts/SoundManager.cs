@@ -11,6 +11,17 @@ public class SoundManager : MonoBehaviour
     public float highPitchRange = 1.05f;			//The highest a sound effect will be randomly pitched.
     
     
+    public AudioClip scavengers_chop1;
+
+    public AudioClip scavengers_die;
+    public AudioClip scavengers_enemy1;
+    public AudioClip    scavengers_enemy2;
+    public AudioClip scavengers_footstep2;
+    public AudioClip scavengers_fruit1;
+    public AudioClip scavengers_fruit2;
+    public AudioClip scavengers_soda1;
+    public AudioClip scavengers_soda2;
+
     void Awake ()
     {
         //Check if there is already an instance of SoundManager
@@ -37,6 +48,37 @@ public class SoundManager : MonoBehaviour
         efxSource.Play ();
     }
     
+
+    public void PlayChop() {
+        PlaySingle(scavengers_chop1);
+    }
+    public void PlayDie() {
+        PlaySingle(scavengers_die);
+    }
+    public void PlayEnemy1() {
+        PlaySingle(scavengers_enemy1);        
+    }
+    public void PlayEnemy2() {
+        PlaySingle(scavengers_enemy2); 
+    }
+
+    public void PlayWalk() {
+        PlaySingle(scavengers_footstep2);
+    }
+    
+    public void PlayGetFruit() {
+        PlaySingle(scavengers_fruit1);
+    }    
+
+    public void PlayUseFruit() {
+        PlaySingle(scavengers_fruit2);
+    }    
+    public void PlayGetSoda() {
+            PlaySingle(scavengers_soda1);
+    }
+    public void PlayUseSoda() {
+        PlaySingle(scavengers_soda2);
+    }
     
     //RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.
     public void RandomizeSfx (params AudioClip[] clips)

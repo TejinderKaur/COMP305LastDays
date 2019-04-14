@@ -23,6 +23,9 @@ public class EnemyController : CanHitController
 
     private Vector3 previousPosition; // keeps the previous position in order to block the movement
     // Start is called before the first frame update
+
+    public SoundManager gameSound;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -101,6 +104,7 @@ public class EnemyController : CanHitController
             if (time < timeToAttack) {
                 return;
             }
+            gameSound.PlayEnemy2();
             isAttacking = false;
             animator.SetBool("isAttacking", isAttacking);
         }

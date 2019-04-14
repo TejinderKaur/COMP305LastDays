@@ -42,6 +42,9 @@ public class PlayerController : CanHitController
 
     private float timeAtack = 0;
 
+    public SoundManager gameSound;
+
+    public AttackController attackController;
     void Start()
     {
         rBody = GetComponent<Rigidbody2D>();
@@ -103,6 +106,7 @@ public class PlayerController : CanHitController
     public void CheckPlayerHealth() {
         if (!isDead && inventoryController.health < 0.5f && inventoryController.medicine > 0) {
             inventoryController.health = inventoryController.health  + 0.5f;
+            gameSound.PlayUseSoda();
             inventoryController.medicine = inventoryController.medicine - 1;
         } else if (!isDead && inventoryController.health <= 0) {
             isDead = true;
@@ -132,6 +136,7 @@ public class PlayerController : CanHitController
             if (timeAtack < timeToAttack) {
                 return;
             }
+            gameSound.PlayChop();
             isAttacking = false;
             animator.SetBool("isAttacking", isAttacking);
         }
@@ -146,16 +151,23 @@ public class PlayerController : CanHitController
     }
 
 
+    int controllingSound = 0;
     private void moveUsingTransform(Vector2 direction)
     {
         if (time < timeToMove) {
             return;
         }
         time = 0;
+        controllingSound++;
         Vector2 nextPosition = direction * spriteBoard.bounds.size.y/(speed * delayRate);
         previousPosition = transform.localPosition;
         transform.localPosition += (Vector3)nextPosition;
         
+        if (controllingSound >= 3) {
+            gameSound.PlayWalk();
+            controllingSound=0;
+        }
+
         DistanceWalked = DistanceWalked + Mathf.Abs(Vector2.Distance(previousPosition, nextPosition))/sprite.bounds.size.x;        
     }
 
@@ -165,10 +177,12 @@ public class PlayerController : CanHitController
         //print( "trigger:" +  other.gameObject.tag);
         if (other.gameObject.tag == "Food")
         {
+            gameSound.PlayGetFruit();
             Destroy(other.gameObject);
             inventoryController.food++;
         } else if (other.gameObject.tag == "Soda")
         {
+            gameSound.PlayGetSoda();
             Destroy(other.gameObject);
             inventoryController.medicine++;
         } else if (other.gameObject.tag == "Exit")
@@ -176,6 +190,7 @@ public class PlayerController : CanHitController
             EndLevel.Invoke(this.inventoryController);
         } else if (other.gameObject.tag == "Enemy")
         {
+            gameSound.PlayDie();
             GetHit(Game.DamageRate/2);
         }
     }
@@ -244,6 +259,7 @@ public class PlayerController : CanHitController
         }
 
         if (inventoryController.hungry > 0.5 && inventoryController.food > 0) {
+            gameSound.PlayUseFruit();
             inventoryController.hungry = inventoryController.hungry  - 0.5f;
             inventoryController.food = inventoryController.food - 1;
         }
