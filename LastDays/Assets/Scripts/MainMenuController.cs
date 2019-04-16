@@ -39,6 +39,10 @@ public class MainMenuController : MonoBehaviour
         SceneManager.LoadScene("Level01");
     }
 
+    public void GoToTutorial()
+    {
+        SceneManager.LoadScene("Tutorial");
+    }
 
     public void GoToGameOver()
     {
